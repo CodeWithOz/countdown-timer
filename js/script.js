@@ -27,6 +27,11 @@ function initialize() {
                 updateTime({ seconds: newVal });
                 break;
 
+            case newVal.length < 5:
+                // minutes and seconds so far
+                updateTime({ seconds: newVal.slice(-2), minutes: newVal.slice(0, -2) });
+                break;
+
             default:
                 break;
         }
@@ -39,6 +44,9 @@ function initialize() {
     function updateTime(time) {
         if (time.seconds) {
             document.querySelector('.timer-container .seconds').textContent = time.seconds.padStart(2, '0');
+        }
+        if (time.minutes) {
+            document.querySelector('.timer-container .minutes').textContent = time.minutes.padStart(2, '0');
         }
     }
 }
