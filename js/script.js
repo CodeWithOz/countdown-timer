@@ -24,12 +24,20 @@ function initialize() {
         switch (true) {
             case newVal.length < 3:
                 // only seconds so far
-                updateTime({ seconds: newVal });
+                updateTime({
+                    seconds: newVal,
+                    minutes: '00',
+                    hours: '00',
+                });
                 break;
 
             case newVal.length < 5:
                 // minutes and seconds so far
-                updateTime({ seconds: newVal.slice(-2), minutes: newVal.slice(0, -2) });
+                updateTime({
+                    seconds: newVal.slice(-2),
+                    minutes: newVal.slice(0, -2),
+                    hours: '00',
+                });
                 break;
 
             default:
@@ -37,7 +45,7 @@ function initialize() {
                 updateTime({
                     seconds: newVal.slice(-2),
                     minutes: newVal.slice(-4, -2),
-                    hours: newVal.slice(0, -4)
+                    hours: newVal.slice(0, -4),
                 });
                 break;
         }
@@ -48,14 +56,8 @@ function initialize() {
     }
 
     function updateTime(time) {
-        if (time.seconds) {
-            document.querySelector('.timer-container .seconds').textContent = time.seconds.padStart(2, '0');
-        }
-        if (time.minutes) {
-            document.querySelector('.timer-container .minutes').textContent = time.minutes.padStart(2, '0');
-        }
-        if (time.hours) {
-            document.querySelector('.timer-container .hours').textContent = time.hours.padStart(2, '0');
-        }
+        document.querySelector('.timer-container .seconds').textContent = time.seconds ? time.seconds.padStart(2, '0') : '00';
+        document.querySelector('.timer-container .minutes').textContent = time.minutes ? time.minutes.padStart(2, '0') : '00';
+        document.querySelector('.timer-container .hours').textContent = time.hours ? time.hours.padStart(2, '0') : '00';
     }
 }
