@@ -64,6 +64,11 @@ function initialize() {
             return;
         }
 
+        // remove focus from the duration field and disable it
+        const durationField = e.target.querySelector('#duration');
+        durationField.blur();
+        durationField.disabled = true;
+
         end = new Date(((Date.now() / 1000) + totalSeconds) * 1000);
         timer = setTimeout(function() {
             updateTimerDisplay();
@@ -99,11 +104,18 @@ function initialize() {
 
         if (now >= end) {
             // timer has expired
-            clearTimeout(timer);
-            timer = null;
+            resetTimer();
         } else {
             // schedule the next update
             timer = setTimeout(updateTimerDisplay, 1000);
         }
+    }
+
+    function resetTimer() {
+        clearTimeout(timer);
+        timer = null;
+        // reactivate the input field
+        const durationField = document.querySelector('#duration');
+        durationField.disabled = false;
     }
 }
