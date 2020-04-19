@@ -21,9 +21,24 @@ function initialize() {
             return;
         }
         curVal = newVal;
+        switch (true) {
+            case newVal.length < 3:
+                // only seconds so far
+                updateTime({ seconds: newVal });
+                break;
+
+            default:
+                break;
+        }
     }, false);
 
     function resetFieldToLastValue(field) {
         field.value = curVal;
+    }
+
+    function updateTime(time) {
+        if (time.seconds) {
+            document.querySelector('.timer-container .seconds').textContent = time.seconds.padStart(2, '0');
+        }
     }
 }
