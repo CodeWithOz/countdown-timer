@@ -33,6 +33,12 @@ function initialize() {
                 break;
 
             default:
+                // hours, minutes, and seconds
+                updateTime({
+                    seconds: newVal.slice(-2),
+                    minutes: newVal.slice(-4, -2),
+                    hours: newVal.slice(0, -4)
+                });
                 break;
         }
     }, false);
@@ -47,6 +53,9 @@ function initialize() {
         }
         if (time.minutes) {
             document.querySelector('.timer-container .minutes').textContent = time.minutes.padStart(2, '0');
+        }
+        if (time.hours) {
+            document.querySelector('.timer-container .hours').textContent = time.hours.padStart(2, '0');
         }
     }
 }
