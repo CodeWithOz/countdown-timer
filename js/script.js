@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }, false);
 
 function initialize() {
-    let curVal = '', timer, end;
+    let curVal = '', timer = null, end;
     document.querySelector('.duration-container input').addEventListener('keyup', e => {
         const newVal = e.target.value;
         if (newVal === curVal) {
@@ -53,6 +53,13 @@ function initialize() {
 
     document.querySelector('#set-timer').addEventListener('submit', e => {
         e.preventDefault();
+        if (timer !== null) {
+            // timer is running, so pause it
+            clearTimer();
+            // update the text of the button
+            showStartPauseText();
+            return;
+        }
         // get the value in the input field
         const duration = document.querySelector('#duration').value.padStart('000000');
         const hoursAsSeconds = 3600 * Number(duration.slice(0, -4));
@@ -69,6 +76,7 @@ function initialize() {
         durationField.blur();
         durationField.disabled = true;
 
+        showStartPauseText('start');
         end = new Date(((Date.now() / 1000) + totalSeconds) * 1000);
         timer = setTimeout(function() {
             updateTimerDisplay();
@@ -111,12 +119,25 @@ function initialize() {
         }
     }
 
-    function resetTimer() {
+    function showStartPauseText(val) {
+        if (val === 'start') {
+            document.querySelector('.btns-container button[type="submit"]').textContent = 'Stop';
+        } else {
+            document.querySelector('.btns-container button[type="submit"]').textContent = 'Start';
+        }
+    }
+
+    function clearTimer() {
         clearTimeout(timer);
         timer = null;
+    }
+
+    function resetTimer() {
+        clearTimer();
         // reactivate the input field
         const durationField = document.querySelector('#duration');
         durationField.disabled = false;
         document.querySelector('.btns-container button[type="submit"]').focus();
+        showStartPauseText();
     }
 }
