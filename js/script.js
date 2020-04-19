@@ -11,7 +11,7 @@ function initialize() {
             return;
         }
         const asNumber = Number(newVal);
-        if (Number.isNaN(asNumber) || asNumber < 1) {
+        if (Number.isNaN(asNumber) || asNumber < 0) {
             resetFieldToLastValue(e.target);
             return;
         }
