@@ -14,3 +14,27 @@ div.timer-container {
 .timer-container .timer-separator {
     margin: 0 0.2em;
 }
+
+#set-timer {
+    margin: 1em 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.duration-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.duration-container input {
+    max-width: 200px;
+    margin: 0.5em;
+}
+
+.btns-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0.5em 0;
+}
