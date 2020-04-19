@@ -51,6 +51,19 @@ function initialize() {
         }
     }, false);
 
+    document.querySelector('#set-timer').addEventListener('submit', e => {
+        // get the value in the input field
+        const duration = document.querySelector('#duration').value.padStart('000000');
+        const hoursAsSeconds = 3600 * Number(duration.slice(0, -4));
+        const minutesAsSeconds = 60 * Number(duration.slice(-4, -2));
+        const seconds = Number(duration.slice(-2));
+        const totalSeconds = hoursAsSeconds + minutesAsSeconds + seconds;
+        if (totalSeconds < 1) {
+            // no duration
+            return;
+        }
+    }, false);
+
     function resetFieldToLastValue(field) {
         field.value = curVal;
     }
