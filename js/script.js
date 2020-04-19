@@ -20,6 +20,7 @@ function initialize() {
             resetFieldToLastValue(e.target);
             return;
         }
+        curVal = newVal;
     }, false);
 
     function resetFieldToLastValue(field) {
