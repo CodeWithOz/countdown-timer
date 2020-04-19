@@ -117,5 +117,6 @@ function initialize() {
         // reactivate the input field
         const durationField = document.querySelector('#duration');
         durationField.disabled = false;
+        document.querySelector('.btns-container button[type="submit"]').focus();
     }
 }
