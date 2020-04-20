@@ -20,6 +20,7 @@ div.timer-container {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    align-items: center;
 }
 
 .duration-container {
@@ -37,6 +38,8 @@ div.timer-container {
     display: flex;
     justify-content: space-evenly;
     margin: 0.5em 0;
+    max-width: 300px;
+    width: 100%;
 }
 
 audio#beeper {
