@@ -32,6 +32,7 @@ function initialize() {
             if (expired) {
                 // reset the user's selection in preparation for a repeat of the
                 // last timer
+                curVal = '';
                 handleUserInput(durationField.value);
             }
             expired = false;
@@ -57,11 +58,12 @@ function initialize() {
         timer = setTimeout(function() {
             updateTimerDisplay();
         }, 1000);
-
-        // reset the current value so that a change can be identified if the timer
-        // is subsequently restarted with the same duration
-        curVal = '';
     }, false);
+
+    document.querySelector('#set-timer').addEventListener('reset', e => {
+        e.preventDefault();
+        resetTimer();
+    });
 
     function handleUserInput(newVal) {
         if (newVal === curVal) {
@@ -176,11 +178,18 @@ function initialize() {
     }
 
     function resetTimer() {
+        // stop beeper
+        toggleBeeper('pause');
+        // reset state variables
+        expired = true;
+        isRunning = false;
         clearTimer();
         // reactivate the input field
         const durationField = document.querySelector('#duration');
         durationField.disabled = false;
-        document.querySelector('.btns-container button[type="submit"]').focus();
+        // reset the input and display
+        handleUserInput('');
+        resetFieldToLastValue();
         showStartPauseText();
     }
 }
