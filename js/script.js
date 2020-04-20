@@ -11,21 +11,71 @@ function initialize() {
             seconds: '',
             minutes: '',
             hours: '',
-        };
+        },
+        expired = true;
     document.querySelector('.duration-container input').addEventListener('keyup', e => {
-        const newVal = e.target.value;
+        handleUserInput(e.target.value);
+    }, false);
+
+    document.querySelector('#set-timer').addEventListener('submit', e => {
+        e.preventDefault();
+        // pause the beeper if it's playing
+        toggleBeeper('pause');
+        const durationField = e.target.querySelector('#duration');
+        if (isRunning) {
+            // timer is running, so pause it
+            clearTimer();
+            durationField.disabled = false;
+            // update the text of the button
+            showStartPauseText();
+            isRunning = false;
+            if (expired) {
+                // reset the user's selection in preparation for a repeat of the
+                // last timer
+                handleUserInput(durationField.value);
+            }
+            expired = false;
+            return;
+        }
+        expired = false;
+        const hoursAsSeconds = 3600 * Number(timeRem.hours);
+        const minutesAsSeconds = 60 * Number(timeRem.minutes);
+        const seconds = Number(timeRem.seconds);
+        const totalSeconds = hoursAsSeconds + minutesAsSeconds + seconds;
+        if (totalSeconds < 1) {
+            // no duration
+            return;
+        }
+        isRunning = true;
+
+        // remove focus from the duration field and disable it
+        durationField.blur();
+        durationField.disabled = true;
+
+        showStartPauseText('start');
+        end = new Date(((Date.now() / 1000) + totalSeconds) * 1000);
+        timer = setTimeout(function() {
+            updateTimerDisplay();
+        }, 1000);
+
+        // reset the current value so that a change can be identified if the timer
+        // is subsequently restarted with the same duration
+        curVal = '';
+    }, false);
+
+    function handleUserInput(newVal) {
         if (newVal === curVal) {
-            resetFieldToLastValue(e.target);
+            resetFieldToLastValue();
             return;
         }
         const asNumber = Number(newVal);
         if (Number.isNaN(asNumber) || asNumber < 0) {
-            resetFieldToLastValue(e.target);
+            resetFieldToLastValue();
             return;
         }
         if (newVal.length > 6) {
             // invalid number of characters
-            resetFieldToLastValue(e.target);
+            resetFieldToLastValue();
             return;
         }
         curVal = newVal;
@@ -57,44 +107,10 @@ function initialize() {
                 });
                 break;
         }
-    }, false);
+    }
 
-    document.querySelector('#set-timer').addEventListener('submit', e => {
-        e.preventDefault();
-        // pause the beeper if it's playing
-        toggleBeeper('pause');
-        if (isRunning) {
-            // timer is running, so pause it
-            clearTimer();
-            // update the text of the button
-            showStartPauseText();
-            isRunning = false;
-            return;
-        }
-        isRunning = true;
-        const hoursAsSeconds = 3600 * Number(timeRem.hours);
-        const minutesAsSeconds = 60 * Number(timeRem.minutes);
-        const seconds = Number(timeRem.seconds);
-        const totalSeconds = hoursAsSeconds + minutesAsSeconds + seconds;
-        if (totalSeconds < 1) {
-            // no duration
-            return;
-        }
-
-        // remove focus from the duration field and disable it
-        const durationField = e.target.querySelector('#duration');
-        durationField.blur();
-        durationField.disabled = true;
-
-        showStartPauseText('start');
-        end = new Date(((Date.now() / 1000) + totalSeconds) * 1000);
-        timer = setTimeout(function() {
-            updateTimerDisplay();
-        }, 1000);
-    }, false);
-
-    function resetFieldToLastValue(field) {
-        field.value = curVal;
+    function resetFieldToLastValue() {
+        document.querySelector('.duration-container input').value = curVal;
     }
 
     function updateTime(time) {
@@ -125,6 +141,7 @@ function initialize() {
 
         if (now >= end) {
             // timer has expired
+            expired = true;
             // first stop the timer
             clearTimer();
             // then play the audio
