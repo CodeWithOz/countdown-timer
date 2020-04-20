@@ -53,6 +53,8 @@ function initialize() {
 
     document.querySelector('#set-timer').addEventListener('submit', e => {
         e.preventDefault();
+        // pause the beeper if it's playing
+        toggleBeeper('pause');
         if (isRunning) {
             // timer is running, so pause it
             clearTimer();
@@ -61,8 +63,6 @@ function initialize() {
             isRunning = false;
             return;
         }
-        // pause the beeper if it's playing
-        toggleBeeper('pause');
         isRunning = true;
         // get the value in the input field
         const duration = document.querySelector('#duration').value.padStart('000000');
