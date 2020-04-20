@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }, false);
 
 function initialize() {
-    let curVal = '', timer = null, end;
+    let curVal = '', timer = null, end, isRunning = false;
     document.querySelector('.duration-container input').addEventListener('keyup', e => {
         const newVal = e.target.value;
         if (newVal === curVal) {
@@ -53,15 +53,17 @@ function initialize() {
 
     document.querySelector('#set-timer').addEventListener('submit', e => {
         e.preventDefault();
-        if (timer !== null) {
+        if (isRunning) {
             // timer is running, so pause it
             clearTimer();
             // update the text of the button
             showStartPauseText();
+            isRunning = false;
             return;
         }
         // pause the beeper if it's playing
         toggleBeeper('pause');
+        isRunning = true;
         // get the value in the input field
         const duration = document.querySelector('#duration').value.padStart('000000');
         const hoursAsSeconds = 3600 * Number(duration.slice(0, -4));
