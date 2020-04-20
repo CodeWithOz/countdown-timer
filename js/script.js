@@ -60,6 +60,8 @@ function initialize() {
             showStartPauseText();
             return;
         }
+        // pause the beeper if it's playing
+        toggleBeeper('pause');
         // get the value in the input field
         const duration = document.querySelector('#duration').value.padStart('000000');
         const hoursAsSeconds = 3600 * Number(duration.slice(0, -4));
@@ -115,12 +117,12 @@ function initialize() {
             // first stop the timer
             clearTimer();
             // then play the audio
-            document.querySelector('audio#beeper').play().catch(console.log);
+            toggleBeeper();
         } else {
             // schedule the next update
             timer = setTimeout(updateTimerDisplay, 1000);
             // make sure the beeper is not playing
-            document.querySelector('audio#beeper').pause();
+            toggleBeeper('pause');
         }
     }
 
@@ -129,6 +131,14 @@ function initialize() {
             document.querySelector('.btns-container button[type="submit"]').textContent = 'Stop';
         } else {
             document.querySelector('.btns-container button[type="submit"]').textContent = 'Start';
+        }
+    }
+
+    function toggleBeeper(val) {
+        if (val === 'pause') {
+            document.querySelector('audio#beeper').pause();
+        } else {
+            document.querySelector('audio#beeper').play().catch(console.log);
         }
     }
 
