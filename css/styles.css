@@ -38,3 +38,11 @@ div.timer-container {
     justify-content: space-evenly;
     margin: 0.5em 0;
 }
+
+audio#beeper {
+    display: none;
+}
+
+.attribution {
+    text-align: center;
+}

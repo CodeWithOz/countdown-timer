@@ -112,10 +112,15 @@ function initialize() {
 
         if (now >= end) {
             // timer has expired
-            resetTimer();
+            // first stop the timer
+            clearTimer();
+            // then play the audio
+            document.querySelector('audio#beeper').play().catch(console.log);
         } else {
             // schedule the next update
             timer = setTimeout(updateTimerDisplay, 1000);
+            // make sure the beeper is not playing
+            document.querySelector('audio#beeper').pause();
         }
     }
 
