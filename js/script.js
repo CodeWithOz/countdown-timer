@@ -3,7 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
 }, false);
 
 function initialize() {
-    let curVal = '', timer = null, end, isRunning = false;
+    let curVal = '',
+        timer = null,
+        end,
+        isRunning = false,
+        timeRem = {
+            seconds: '',
+            minutes: '',
+            hours: '',
+        };
     document.querySelector('.duration-container input').addEventListener('keyup', e => {
         const newVal = e.target.value;
         if (newVal === curVal) {
@@ -64,11 +72,9 @@ function initialize() {
             return;
         }
         isRunning = true;
-        // get the value in the input field
-        const duration = document.querySelector('#duration').value.padStart('000000');
-        const hoursAsSeconds = 3600 * Number(duration.slice(0, -4));
-        const minutesAsSeconds = 60 * Number(duration.slice(-4, -2));
-        const seconds = Number(duration.slice(-2));
+        const hoursAsSeconds = 3600 * Number(timeRem.hours);
+        const minutesAsSeconds = 60 * Number(timeRem.minutes);
+        const seconds = Number(timeRem.seconds);
         const totalSeconds = hoursAsSeconds + minutesAsSeconds + seconds;
         if (totalSeconds < 1) {
             // no duration
@@ -92,9 +98,12 @@ function initialize() {
     }
 
     function updateTime(time) {
-        document.querySelector('.timer-container .seconds').textContent = time.seconds ? time.seconds.padStart(2, '0') : '00';
-        document.querySelector('.timer-container .minutes').textContent = time.minutes ? time.minutes.padStart(2, '0') : '00';
-        document.querySelector('.timer-container .hours').textContent = time.hours ? time.hours.padStart(2, '0') : '00';
+        timeRem.seconds = time.seconds ? time.seconds.padStart(2, '0') : '00';
+        timeRem.minutes = time.minutes ? time.minutes.padStart(2, '0') : '00';
+        timeRem.hours = time.hours ? time.hours.padStart(2, '0') : '00';
+        document.querySelector('.timer-container .seconds').textContent = timeRem.seconds;
+        document.querySelector('.timer-container .minutes').textContent = timeRem.minutes;
+        document.querySelector('.timer-container .hours').textContent = timeRem.hours;
     }
 
     function updateTimerDisplay() {
