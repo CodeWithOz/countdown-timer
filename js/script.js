@@ -126,22 +126,22 @@ function initialize() {
 
     function updateTimerDisplay() {
         // get the time since the start
-        const now = new Date();
-        const nowSeconds = now.getSeconds();
-        const nowMinutes = now.getMinutes();
-        const nowHours = now.getHours();
-        const remSeconds = String(end.getSeconds() - nowSeconds);
-        const remMinutes = String(end.getMinutes() - nowMinutes);
-        const remHours = String(end.getHours() - nowHours);
+        const now = Date.now();
+        const nowDate = new Date(now);
+        let secondsFromEnd = Math.round((end.getTime() - now) / 1000);
+        const remHours = Math.floor(secondsFromEnd / 3600);
+        secondsFromEnd -= remHours * 3600;
+        const remMinutes = Math.floor(secondsFromEnd / 60);
+        const remSeconds = secondsFromEnd % 60;
 
         // update the timer display
         updateTime({
-            seconds: remSeconds,
-            minutes: remMinutes,
-            hours: remHours,
+            seconds: String(remSeconds),
+            minutes: String(remMinutes),
+            hours: String(remHours),
         });
 
-        if (now >= end) {
+        if (nowDate >= end) {
             // timer has expired
             expired = true;
             // first stop the timer
