@@ -13,6 +13,14 @@ function initialize() {
             hours: '',
         },
         expired = true;
+
+    // to work around audio restrictions on ios, start playing the audio immediately
+    // any click happens on the page
+    // see https://stackoverflow.com/a/57547943/7987987
+    document.addEventListener('click', function() {
+        document.querySelector('audio#beeper').play().catch(console.log);
+    }, false);
+
     document.querySelector('.duration-container input').addEventListener('keyup', e => {
         handleUserInput(e.target.value);
     }, false);
@@ -166,9 +174,9 @@ function initialize() {
 
     function toggleBeeper(val) {
         if (val === 'pause') {
-            document.querySelector('audio#beeper').pause();
+            document.querySelector('audio#beeper').src = '';
         } else {
-            document.querySelector('audio#beeper').play().catch(console.log);
+            document.querySelector('audio#beeper').src = 'audio/analog-watch-alarm_daniel-simion.mp3';
         }
     }
 
