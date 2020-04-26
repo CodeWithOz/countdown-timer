@@ -12,20 +12,13 @@ function initialize() {
             minutes: '',
             hours: '',
         },
-        expired = true,
-        audioIsPlaying = false;
+        expired = true;
 
-    // to work around audio restrictions on ios, start playing the audio element once
+    // to work around audio restrictions on ios, start playing the audio immediately
     // any click happens on the page
     // see https://stackoverflow.com/a/57547943/7987987
     document.addEventListener('click', function() {
-        const beeper = document.querySelector('audio#beeper');
-        if (!audioIsPlaying) {
-            // mute the file before playing it
-            beeper.volume = 0;
-            beeper.play().catch(console.log);
-            audioIsPlaying = true;
-        }
+        document.querySelector('audio#beeper').play().catch(console.log);
     }, false);
 
     document.querySelector('.duration-container input').addEventListener('keyup', e => {
@@ -180,13 +173,11 @@ function initialize() {
     }
 
     function toggleBeeper(val) {
-        const beeper = document.querySelector('audio#beeper');
         if (val === 'pause') {
-            beeper.volume = 0;
+            document.querySelector('audio#beeper').src = '';
         } else {
-            beeper.volume = 1;
+            document.querySelector('audio#beeper').src = 'audio/analog-watch-alarm_daniel-simion.mp3';
         }
-        beeper.play().catch(console.log);
     }
 
     function clearTimer() {
