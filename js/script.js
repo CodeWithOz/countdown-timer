@@ -184,26 +184,49 @@ function initialize() {
         }
 
         if (Notification.permission === 'granted') {
-            new Notification('Timer complete', {
-                body: 'The timer is expired.',
-                requireInteraction: true,
-            });
-
+            createNotification();
             return;
         }
 
         if (Notification.permission !== 'denied') {
             // user hasn't denied permission previously
-            Notification.requestPermission().then(({ granted }) => {
-                if (granted) {
-                    new Notification('Timer complete', {
-                        body: 'The timer is expired.',
-                        requireInteraction: true,
-                    });
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    createNotification();
                 }
             });
         }
     }
+
+    function createNotification() {
+        let notification = new Notification('Timer complete', {
+            body: 'The timer is expired.',
+            requireInteraction: true,
+            // TODO: move this to a service worker
+            // actions: [
+            //     {
+            //         action: 'stop',
+            //         title: 'Stop',
+            //     },
+            //     {
+            //         action: 'restart',
+            //         title: 'Restart',
+            //     }
+            // ],
+        });
+
+        // TODO: move this to a service worker
+        // notification.onclick = function(event) {
+        //     event.notification.close();
+        //     const startStopBtn = document.querySelector('.play-pause');
+        //     // always stop the timer
+        //     startStopBtn.click();
+        //     // restart the timer if the user tapped the restart button
+        //     if (event.action === 'restart') {
+        //         setTimeout(() => startStopBtn.click());
+        //     }
+        // };
+}
 
     function clearTimer() {
         clearTimeout(timer);
