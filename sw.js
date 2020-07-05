@@ -2,7 +2,7 @@ var cacheName = 'offline-countdown-timer';
 var filesToCache = [
   '/',
   '/index.html',
-  '/css/style.css',
+  '/css/styles.css',
   '/js/script.js',
   '/audio/analog-watch-alarm_daniel-simion.mp3',
 ];
