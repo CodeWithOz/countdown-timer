@@ -174,6 +174,34 @@ function initialize() {
             document.querySelector('audio#beeper').pause();
         } else {
             document.querySelector('audio#beeper').play().catch(console.log);
+            displayNotification();
+        }
+    }
+
+    function displayNotification() {
+        if (!window.Notification) {
+            return;
+        }
+
+        if (Notification.permission === 'granted') {
+            new Notification('Timer complete', {
+                body: 'The timer is expired.',
+                requireInteraction: true,
+            });
+
+            return;
+        }
+
+        if (Notification.permission !== 'denied') {
+            // user hasn't denied permission previously
+            Notification.requestPermission().then(({ granted }) => {
+                if (granted) {
+                    new Notification('Timer complete', {
+                        body: 'The timer is expired.',
+                        requireInteraction: true,
+                    });
+                }
+            });
         }
     }
 
