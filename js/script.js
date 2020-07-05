@@ -1,3 +1,8 @@
+// install service worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initialize();
 }, false);
