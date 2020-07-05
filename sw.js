@@ -9,9 +9,14 @@ var filesToCache = [
 
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function(e) {
+  console.log('[service worker] installed, skipping wait step');
+  console.log('[service worker] skipped wait step');
   e.waitUntil(
     caches.open(cacheName).then(function(cache) {
       return cache.addAll(filesToCache);
+    }).catch(err => {
+      console.log('err:', err);
+      return Promise.resolve();
     })
   );
 });
