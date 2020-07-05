@@ -28,10 +28,22 @@ self.addEventListener('activate', e => {
 });
 
 /* Serve cached content when offline */
-self.addEventListener('fetch', function(e) {
-  e.respondWith(
-    caches.match(e.request).then(function(response) {
-      return response || fetch(e.request);
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.open(cacheName).then(function(cache) {
+      return cache.match(event.request).then(function (response) {
+        return response || fetch(event.request).then(function(response) {
+          if (/^2/.test(String(response.status))) {
+            // the network response has status code 2xx
+            // so we add to cache
+            cache.put(event.request, response.clone());
+          }
+          return response;
+        }).catch(function(errRes) {
+          // the request failed, so we return the response without caching
+          return errRes;
+        });
+      });
     })
   );
 });
