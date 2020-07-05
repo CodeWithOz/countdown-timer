@@ -21,6 +21,12 @@ self.addEventListener('install', function(e) {
   );
 });
 
+self.addEventListener('activate', e => {
+  console.log('[service worker] activated, claiming control without reload');
+  self.clients.claim();
+  console.log('[service worker] control has been claimed without reload');
+});
+
 /* Serve cached content when offline */
 self.addEventListener('fetch', function(e) {
   e.respondWith(
