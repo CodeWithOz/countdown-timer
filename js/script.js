@@ -199,34 +199,64 @@ function initialize() {
     }
 
     function createNotification() {
-        let notification = new Notification('Timer complete', {
-            body: 'The timer is expired.',
-            requireInteraction: true,
-            // TODO: move this to a service worker
-            // actions: [
-            //     {
-            //         action: 'stop',
-            //         title: 'Stop',
-            //     },
-            //     {
-            //         action: 'restart',
-            //         title: 'Restart',
-            //     }
-            // ],
-        });
+        // ask service worker to show the notification
+        // to ensure that we have access to notification actions
+        navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification('Timer complete', {
+                body: 'The timer is expired.',
+                requireInteraction: true,
+                actions: [
+                    {
+                        action: 'stop',
+                        title: 'Stop',
+                    },
+                    {
+                        action: 'restart',
+                        title: 'Restart',
+                    }
+                ],
+            });
 
-        // TODO: move this to a service worker
-        // notification.onclick = function(event) {
-        //     event.notification.close();
-        //     const startStopBtn = document.querySelector('.play-pause');
-        //     // always stop the timer
-        //     startStopBtn.click();
-        //     // restart the timer if the user tapped the restart button
-        //     if (event.action === 'restart') {
-        //         setTimeout(() => startStopBtn.click());
-        //     }
-        // };
-}
+            // TODO: add logic to handle the message from the SW that says
+            // the user clicked a button
+            /*
+            // always stop the timer
+            const startStopBtn = document.querySelector('.play-pause');
+            startStopBtn.click();
+            // restart the timer if the user tapped the restart button
+            if (event.action === 'restart') {
+                setTimeout(() => startStopBtn.click());
+            }
+            if (event.data.message === 'expired') {
+                let notification = new Notification('Timer complete', {
+                    body: 'The timer is expired.',
+                    requireInteraction: true,
+                    actions: [
+                        {
+                            action: 'stop',
+                            title: 'Stop',
+                        },
+                        {
+                            action: 'restart',
+                            title: 'Restart',
+                        }
+                    ],
+                });
+            }
+
+            notification.onclick = function(event) {
+                event.notification.close();
+                const startStopBtn = document.querySelector('.play-pause');
+                // always stop the timer
+                startStopBtn.click();
+                // restart the timer if the user tapped the restart button
+                if (event.action === 'restart') {
+                    setTimeout(() => startStopBtn.click());
+                }
+            };
+            */
+        });
+    }
 
     function clearTimer() {
         clearTimeout(timer);
