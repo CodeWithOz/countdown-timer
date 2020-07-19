@@ -52,24 +52,28 @@ self.addEventListener('notificationclick', event => {
   event.notification.close();
   // This looks to see if the current is already open and
   // focuses if it is
-  if (event.action !== 'restart' && event.action !== 'stop') {
-    // didn't click on any of the notifications, show the app
-    event.waitUntil(clients.matchAll({
-      type: "window"
-    }).then(function(clientList) {
-      for (var i = 0; i < clientList.length; i++) {
-        var client = clientList[i];
-        if (client.url == '/' && 'focus' in client) {
+  // didn't click on any of the notifications, show the app
+  event.waitUntil(clients.matchAll({
+    type: "window"
+  }).then(function(clientList) {
+    for (var i = 0; i < clientList.length; i++) {
+      var client = clientList[i];
+      if (client.url == '/' && 'focus' in client) {
+        if (event.action === 'restart' || event.action === 'stop') {
+          return notifyClient(client, action);
+        } else {
           return client.focus();
         }
       }
-      if (clients.openWindow) {
+    }
+    if (clients.openWindow) {
+      if (event.action === 'restart' || event.action === 'stop') {
+        return notifyClient(client, action);
+      } else {
         return clients.openWindow('/');
       }
-    }));
-  } else {
-    notifyClient(client, event.action);
-  }
+    }
+  }));
 
   function notifyClient(client, action) {
     client.postMessage({ action });
