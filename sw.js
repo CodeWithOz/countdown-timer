@@ -68,7 +68,7 @@ self.addEventListener('notificationclick', event => {
         }
       }
     }
-    if (event.action === 'restart' || event.action === 'stop') {
+    if (timerClient && (event.action === 'restart' || event.action === 'stop')) {
       return notifyClient(timerClient, event.action);
     } else if (clients.openWindow) {
       return clients.openWindow(self.location.origin);
