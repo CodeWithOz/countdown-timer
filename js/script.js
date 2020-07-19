@@ -1,6 +1,16 @@
 // install service worker
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js');
+    // listen for messages from the worker
+    navigator.serviceWorker.addEventListener('message', event => {
+        // always stop the timer
+        const startStopBtn = document.querySelector('.play-pause');
+        startStopBtn.click();
+        // restart the timer if the user tapped the restart button
+        if (event.action === 'restart') {
+            setTimeout(() => startStopBtn.click());
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

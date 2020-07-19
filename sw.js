@@ -52,8 +52,8 @@ self.addEventListener('notificationclick', event => {
   event.notification.close();
   // This looks to see if the current is already open and
   // focuses if it is
-  if (event.action === 'restart' || event.action === 'stop') {
-    // show the app
+  if (event.action !== 'restart' && event.action !== 'stop') {
+    // didn't click on any of the notifications, show the app
     event.waitUntil(clients.matchAll({
       type: "window"
     }).then(function(clientList) {
