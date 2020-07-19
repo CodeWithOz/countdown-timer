@@ -56,22 +56,22 @@ self.addEventListener('notificationclick', event => {
   event.waitUntil(clients.matchAll({
     type: "window"
   }).then(function(clientList) {
+    let timerClient;
     for (var i = 0; i < clientList.length; i++) {
       var client = clientList[i];
-      if (client.url == '/' && 'focus' in client) {
+      if (client.url.indexOf(self.location.origin)) {
+        timerClient = client;
         if (event.action === 'restart' || event.action === 'stop') {
           return notifyClient(client, action);
-        } else {
+        } else if('focus' in client) {
           return client.focus();
         }
       }
     }
-    if (clients.openWindow) {
-      if (event.action === 'restart' || event.action === 'stop') {
-        return notifyClient(client, action);
-      } else {
-        return clients.openWindow('/');
-      }
+    if (event.action === 'restart' || event.action === 'stop') {
+      return notifyClient(timerClient, action);
+    } else if (clients.openWindow) {
+      return clients.openWindow(self.location.origin);
     }
   }));
 
