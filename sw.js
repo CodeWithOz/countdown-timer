@@ -59,7 +59,7 @@ self.addEventListener('notificationclick', event => {
     let timerClient;
     for (var i = 0; i < clientList.length; i++) {
       var client = clientList[i];
-      if (client.url.indexOf(self.location.origin)) {
+      if (client.url.indexOf(self.location.origin) > -1) {
         timerClient = client;
         if (event.action === 'restart' || event.action === 'stop') {
           return notifyClient(client, action);
