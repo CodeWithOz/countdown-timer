@@ -212,8 +212,16 @@ function initialize() {
         // ask service worker to show the notification
         // to ensure that we have access to notification actions
         navigator.serviceWorker.ready.then(registration => {
+            let timerDuration = document.querySelector('#duration').value;
+            if (timerDuration.length < 3) {
+                timerDuration = '00:00:' + timerDuration.padStart(2, '0');
+            } else if (timerDuration < 5) {
+                timerDuration = '00:' + timerDuration.slice(0, -2).padStart(2, '0') + ':' + timerDuration.slice(-2);
+            } else {
+                timerDuration = timerDuration.slice(0, -4).padStart(2, '0') + ':' + timerDuration.slice(-4, -2) + timerDuration.slice(-2);
+            }
             registration.showNotification('Timer complete', {
-                body: 'The timer is expired.',
+                body: `${timerDuration} timer is expired.`,
                 requireInteraction: true,
                 actions: [
                     {
