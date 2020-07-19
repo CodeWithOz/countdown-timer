@@ -62,14 +62,14 @@ self.addEventListener('notificationclick', event => {
       if (client.url.indexOf(self.location.origin) > -1) {
         timerClient = client;
         if (event.action === 'restart' || event.action === 'stop') {
-          return notifyClient(client, action);
+          return notifyClient(client, event.action);
         } else if('focus' in client) {
           return client.focus();
         }
       }
     }
     if (event.action === 'restart' || event.action === 'stop') {
-      return notifyClient(timerClient, action);
+      return notifyClient(timerClient, event.action);
     } else if (clients.openWindow) {
       return clients.openWindow(self.location.origin);
     }
