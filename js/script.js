@@ -7,7 +7,7 @@ if ('serviceWorker' in navigator) {
         const startStopBtn = document.querySelector('.play-pause');
         startStopBtn.click();
         // restart the timer if the user tapped the restart button
-        if (event.action === 'restart') {
+        if (event.data.action === 'restart') {
             setTimeout(() => startStopBtn.click());
         }
     });
